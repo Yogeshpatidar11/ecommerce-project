@@ -4,7 +4,7 @@ import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { useAuth } from "../../context/auth";
 import moment from "moment";
-import { API_URL } from "../config";
+import { API_URL } from "../../config";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
