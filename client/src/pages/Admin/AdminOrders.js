@@ -6,7 +6,7 @@ import Layout from "../../components/Layout/Layout";
 import { useAuth } from "../../context/auth";
 import moment from "moment";
 import { Select } from "antd";
-import { API_URL } from "../config";
+import { API_URL } from "../../config";
 
 const { Option } = Select;
 
