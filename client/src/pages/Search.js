@@ -4,6 +4,7 @@ import { useSearch } from "../context/search";
 import { useCart } from "../context/cart"; // 1. Import your Cart Hook
 import { useNavigate } from "react-router-dom"; // 2. Import Navigate Hook
 import toast from "react-hot-toast"; // 3. For user feedback
+import { API_URL } from "../config";
 const Search = () => {
   const [values, setValues] = useSearch();
   const [cart, setCart] = useCart(); // 4. Initialize Cart context
@@ -22,7 +23,7 @@ const Search = () => {
             {values?.results.map((p) => (
               <div className="card m-2" style={{ width: "18rem" }}>
                 <img
-                  src={`/api/v1/product/product-photo/${p._id}`}
+                  src={`${API_URL}/api/v1/product/product-photo/${p._id}`}
                   className="card-img-top"
                   alt={p.name}
                 />
@@ -49,7 +50,7 @@ const Search = () => {
                       setCart([...cart, p]);
                       localStorage.setItem(
                         "cart",
-                        JSON.stringify([...cart, p])
+                        JSON.stringify([...cart, p]),
                       );
                       toast.success("Item Added to cart");
                     }}

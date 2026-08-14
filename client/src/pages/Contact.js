@@ -1,13 +1,14 @@
 import React from "react";
 import Layout from "./../components/Layout/Layout";
 import { BiMailSend, BiPhoneCall, BiSupport } from "react-icons/bi";
+import { API_URL } from "../config";
 const Contact = () => {
   return (
     <Layout title="Contact Us">
       <div className="row contactus ">
         <div className="col-md-6 ">
           <img
-            src="/images/contactus.jpeg"
+            src={`${API_URL}/images/contactus.jpeg`}
             alt="contactus"
             style={{ width: "100%" }}
           />

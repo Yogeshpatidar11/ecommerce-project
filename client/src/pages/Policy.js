@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "./../components/Layout/Layout";
+import { API_URL } from "../config";
 
 const Policy = () => {
   return (
@@ -7,7 +8,7 @@ const Policy = () => {
       <div className="row contactus ">
         <div className="col-md-6 ">
           <img
-            src="/images/contactus.jpeg"
+            src={`${API_URL}/images/contactus.jpeg`}
             alt="contactus"
             style={{ width: "100%" }}
           />
