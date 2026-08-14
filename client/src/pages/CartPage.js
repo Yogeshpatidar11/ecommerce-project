@@ -91,7 +91,7 @@ const CartPage = () => {
 
       // 🟢 Step 1: Create Order from backend
       const { data } = await axios.post(
-        "/api/v1/product/razorpay/order",
+        `${API_URL}/api/v1/product/razorpay/order`,
         { amount: totalAmount },
         {
           headers: {
@@ -111,7 +111,7 @@ const CartPage = () => {
         handler: async function (response) {
           try {
             const verifyRes = await axios.post(
-              "/api/v1/product/razorpay/verify",
+              `${API_URL}/api/v1/product/razorpay/verify`,
               {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_order_id: response.razorpay_order_id,
