@@ -14,7 +14,7 @@ const Orders = () => {
   const getOrders = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("/api/v1/auth/orders", {
+      const { data } = await axios.get(`${API_URL}/api/v1/auth/orders`, {
         headers: { Authorization: auth?.token },
       });
 
