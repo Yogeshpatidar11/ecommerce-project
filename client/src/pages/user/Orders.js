@@ -4,6 +4,7 @@ import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { useAuth } from "../../context/auth";
 import moment from "moment";
+import { API_URL } from "../config";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -91,7 +92,7 @@ const Orders = () => {
                         >
                           <div className="col-md-4 text-center">
                             <img
-                              src={`/api/v1/product/product-photo/${p._id}`}
+                              src={`${API_URL}/api/v1/product/product-photo/${p._id}`}
                               className="card-img-top rounded"
                               alt={p.name}
                               width="100px"

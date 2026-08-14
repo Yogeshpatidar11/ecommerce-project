@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "./../components/Layout/Layout";
+import { API_URL } from "../config";
 
 const About = () => {
   return (
@@ -7,7 +8,7 @@ const About = () => {
       <div className="row contactus ">
         <div className="col-md-6 ">
           <img
-            src="/images/about.jpeg"
+            src={`${API_URL}/images/about.jpeg`}
             alt="contactus"
             style={{ width: "100%" }}
           />
