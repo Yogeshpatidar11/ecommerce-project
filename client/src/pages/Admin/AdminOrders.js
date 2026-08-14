@@ -6,6 +6,7 @@ import Layout from "../../components/Layout/Layout";
 import { useAuth } from "../../context/auth";
 import moment from "moment";
 import { Select } from "antd";
+import { API_URL } from "../config";
 
 const { Option } = Select;
 
@@ -102,7 +103,7 @@ const AdminOrders = () => {
                         className="d-flex align-items-center border rounded p-2 mb-2"
                       >
                         <img
-                          src={`/api/v1/product/product-photo/${p._id}`}
+                          src={`${API_URL}/api/v1/product/product-photo/${p._id}`}
                           alt={p.name}
                           style={{
                             width: "120px",
