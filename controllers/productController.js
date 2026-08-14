@@ -359,6 +359,61 @@ export const createRazorpayOrder = async (req, res) => {
   }
 };
 
+// export const verifyRazorpayPayment = async (req, res) => {
+//   try {
+//     const {
+//       razorpay_order_id,
+//       razorpay_payment_id,
+//       razorpay_signature,
+//       cart,
+//       buyer, // 🟢 frontend se bhejna hoga (login user ka id)
+//       amount,
+//     } = req.body;
+
+//     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "Missing parameters" });
+//     }
+
+//     const sign = razorpay_order_id + "|" + razorpay_payment_id;
+
+//     const expectedSign = crypto
+//       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+//       .update(sign.toString())
+//       .digest("hex");
+
+//     if (razorpay_signature === expectedSign) {
+//       // 🟢 Save Order in DB with your schema
+//       const newOrder = await Order.create({
+//         products: cart.map((item) => item._id), // sirf product ids save karna
+//         payment: {
+//           razorpay_order_id,
+//           razorpay_payment_id,
+//           razorpay_signature,
+//           amount,
+//         },
+//         buyer, // frontend se bhejo
+//         status: "Not Process",
+//       });
+
+//       return res.status(200).json({
+//         success: true,
+//         message: "Payment verified & order created 🎉",
+//         order: newOrder,
+//       });
+//     } else {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "Invalid signature" });
+//     }
+//   } catch (error) {
+//     console.error("Verify Error:", error);
+//     res
+//       .status(500)
+//       .json({ success: false, message: "Payment verification failed" });
+//   }
+// };
 export const verifyRazorpayPayment = async (req, res) => {
   try {
     const {
@@ -366,35 +421,39 @@ export const verifyRazorpayPayment = async (req, res) => {
       razorpay_payment_id,
       razorpay_signature,
       cart,
-      buyer, // 🟢 frontend se bhejna hoga (login user ka id)
+      buyer, // from frontend (logged-in user ID)
       amount,
     } = req.body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing parameters" });
+      return res.status(400).json({
+        success: false,
+        message: "Missing Razorpay parameters",
+      });
     }
 
+    // Create signature string
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
+    // Validate the signature
     const expectedSign = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(sign.toString())
       .digest("hex");
 
     if (razorpay_signature === expectedSign) {
-      // 🟢 Save Order in DB with your schema
+      // ✅ Signature matches: save order in DB
       const newOrder = await Order.create({
-        products: cart.map((item) => item._id), // sirf product ids save karna
+        products: cart.map((item) => item._id),
         payment: {
           razorpay_order_id,
           razorpay_payment_id,
           razorpay_signature,
           amount,
+          success: true, // 👈 Important! ensures frontend shows “Success”
         },
-        buyer, // frontend se bhejo
-        status: "Not Process",
+        buyer,
+        status: "Processing",
       });
 
       return res.status(200).json({
@@ -403,15 +462,33 @@ export const verifyRazorpayPayment = async (req, res) => {
         order: newOrder,
       });
     } else {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid signature" });
+      // ❌ Signature mismatch: mark payment failed
+      const failedOrder = await Order.create({
+        products: cart.map((item) => item._id),
+        payment: {
+          razorpay_order_id,
+          razorpay_payment_id,
+          razorpay_signature,
+          amount,
+          success: false, // 👈 explicitly mark failed
+        },
+        buyer,
+        status: "Failed",
+      });
+
+      return res.status(400).json({
+        success: false,
+        message: "Invalid payment signature ❌",
+        order: failedOrder,
+      });
     }
   } catch (error) {
-    console.error("Verify Error:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Payment verification failed" });
+    console.error("Verify Razorpay Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Payment verification failed due to server error",
+      error: error.message,
+    });
   }
 };
 
