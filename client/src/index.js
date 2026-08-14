@@ -8,6 +8,12 @@ import { AuthProvider } from "./context/auth";
 import { SearchProvider } from "./context/search";
 import { CartProvider } from "./context/cart";
 import "antd/dist/reset.css";
+import axios from "axios";
+
+axios.defaults.baseURL =
+  process.env.NODE_ENV === "production"
+    ? "https://ecommerce-project-1-wa4d.onrender.com"
+    : "";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthProvider>
@@ -18,7 +24,7 @@ root.render(
         </BrowserRouter>
       </CartProvider>
     </SearchProvider>
-  </AuthProvider>
+  </AuthProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

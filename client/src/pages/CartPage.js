@@ -96,7 +96,7 @@ const CartPage = () => {
           headers: {
             Authorization: auth?.token,
           },
-        }
+        },
       );
 
       // 🟢 Step 2: Razorpay Checkout
@@ -123,7 +123,7 @@ const CartPage = () => {
                 headers: {
                   Authorization: auth?.token, // <-- Add this
                 },
-              }
+              },
             );
 
             if (verifyRes.data.success) {
